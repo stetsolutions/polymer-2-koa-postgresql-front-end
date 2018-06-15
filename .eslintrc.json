@@ -1,0 +1,16 @@
+{
+  "extends": "standard",
+  
+  "env": {
+      "browser": true
+  },
+  "globals": {
+      "changeCase": true,
+      "moment": true,
+      "owaspPasswordStrengthTest": true,
+      "Polymer": false
+  },
+  "plugins": [
+      "html"
+  ]
+}

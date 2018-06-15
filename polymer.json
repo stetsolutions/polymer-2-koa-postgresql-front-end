@@ -1,0 +1,37 @@
+{
+  "entrypoint": "index.html",
+  "shell": "src/my-app.html",
+  "fragments": [
+    "src/my-change-password.html",
+    "src/my-dashboard.html",
+    "src/my-edit-profile.html",
+    "src/my-error.html",
+    "src/my-example.html",
+    "src/my-login.html",
+    "src/my-pagination.html",
+    "src/my-password-validator.html",
+    "src/my-user.html"
+  ],
+  "sources": [
+    "src/**/*",
+    "images/**/*",
+    "bower.json"
+  ],
+  "extraDependencies": [
+    "bower_components/webcomponentsjs/*.js",
+    "manifest.json"
+  ],
+  "lint": {
+    "rules": ["polymer-2"]
+  },
+  "builds": [
+    {
+      "basePath": true,
+      "preset": "es6-bundled"
+    },
+    {
+      "basePath": true,
+      "preset": "es5-bundled"
+    }
+  ]
+}

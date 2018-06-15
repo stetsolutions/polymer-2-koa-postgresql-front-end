@@ -1,0 +1,380 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/iron-form/iron-form.html">
+<link rel="import" href="../bower_components/iron-icons/image-icons.html">
+
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+
+<link rel="import" href="shared-style.html">
+
+<dom-module id="my-edit-profile">
+  
+  <template>
+    
+    <style include="shared-styles">
+
+      :host {
+        display: block;
+      }
+
+      .iron-form {
+        margin-bottom: 16px;
+      }
+
+      .profile_bottom,
+      .profile_top {
+        min-width: 100px;
+        @apply --layout-center-center;
+        @apply --layout-vertical;
+      }
+
+      .iron-form__input {
+        width:100%;
+      }
+
+      .profile_bottom {
+        margin-top: 32px;
+      }
+
+      @media only screen and (min-width: 768px) {
+        
+        .iron-form__input {
+          width: 425px;
+        }
+
+      }
+
+    </style>
+
+    <div 
+      class="card" 
+      id="card"
+    >
+      <iron-form>
+        <form>
+          <div class="profile_top">
+            <paper-input 
+              auto-validate
+              class="iron-form__input"
+              id="first-name"
+              label="First Name"
+              name="firstName"
+              on-focus="_handleFocus"
+              pattern=".*[^ ].*"
+              required
+              value="[[user.first_name]]"
+            ></paper-input>
+            <paper-input 
+              auto-validate
+              class="iron-form__input"
+              id="last-name"
+              label="Last Name"
+              name="lastName"
+              on-focus="_handleFocus"
+              pattern=".*[^ ].*"
+              required
+              value="[[user.last_name]]"
+            ></paper-input>
+            <paper-input 
+              auto-validate
+              class="iron-form__input"
+              id="email"
+              label="Email"
+              name="email"
+              on-focus="_handleFocus"
+              required
+              type="email"
+              value="[[user.email]]"
+            ></paper-input>
+            <paper-input 
+              auto-validate
+              class="iron-form__input"
+              id="username"
+              label="Username"
+              name="username"
+              on-focus="_handleFocus"
+              pattern=".*[^ ].*"
+              required
+              value="[[user.username]]"
+            ></paper-input>
+          </div>
+
+          <div class="profile_bottom">
+            <paper-button
+              class="button"
+              id="submit"
+              on-tap="_handleSubmit"
+              raised
+            >
+              <iron-icon icon="image:edit"></iron-icon>
+              <span class="button__text">Edit<span>
+            </paper-button>
+          </div>
+        </form>
+      </iron-form>
+    </div>
+
+    <iron-ajax
+      content-type="application/json"
+      debounce-duration="300"
+      handle-as="json"
+      id="ajax"
+      rejectWithRequest=true
+      with-credentials=true
+    ></iron-ajax>
+
+    <iron-meta id="meta"></iron-meta>
+
+  </template>
+
+  <script>
+
+    class MyEditProfile extends Polymer.MutableData(Polymer.Element) {
+      static get is () { return 'my-edit-profile' }
+
+      static get properties () {
+        return {
+          config: {
+            type: Object
+          },
+          user: {
+            notify: true,
+            type: Object
+          }
+        }
+      }
+
+      constructor () {
+        super()
+
+        this.user = JSON.parse(localStorage.getItem('user'))
+      }
+
+      connectedCallback () {
+        super.connectedCallback()
+
+        this.config = JSON.parse(this.$['meta'].byKey('config'))
+
+        this._attachListeners()
+      }
+
+      /**
+       * Attach listeners
+       */
+      _attachListeners () {
+        document.addEventListener('page-changed', event => this._handlePageChange(event))
+      }
+
+      /**
+       * Check Exists
+       * @param {string} column
+       * @param {string} value
+       */
+      _checkExists (column, value) {
+        const ajax = this.$['ajax']
+    
+        return new Promise((resolve, reject) => {
+          if (value) {
+            if (column === 'email') {
+              value = value.trim().toLowerCase()
+            } else {
+              value = value.trim()
+            }
+    
+            ajax.body = {}
+            ajax.method = 'get'
+            ajax.params = {}
+            ajax.url = `${this.config.api.origin}/${this.config.api.path}/users/${column}/${value.trim()}`
+    
+            const request = ajax.generateRequest()
+    
+            request
+              .completes
+              .then(
+                function (req) {
+                  resolve(req.response)
+                },
+                function () {
+                  this._message('var(--paper-red-700)', 'Communication Error: Please refresh your browser.')
+                }
+                .bind(this)
+              )
+          } else {
+            resolve()
+          }
+        })
+      }
+
+      /**
+       * Handle focus
+       * @param {event} event
+       */
+      _handleFocus (event) {
+        const element = event.currentTarget
+
+        element.errorMessage = ''
+        element.invalid = false
+      }
+
+      /**
+       * Handle page change
+       * @param {object} event
+       */
+      _handlePageChange (event) {
+        if (event.detail.page === 'edit-profile') {
+          this.notifyPath('user')
+        }
+      }
+
+      /**
+       * Handle submit
+       */
+      _handleSubmit () {
+        this.$['card'].children[0].validate()
+
+        this._verifyUniqueness()
+      }
+
+      /**
+       * Message
+       * @param {string} color
+       * @param {string} text
+       */
+      _message (color, text) {
+        let toast = document.querySelector('.toast')
+
+        toast.style.backgroundColor = color
+        toast.text = text
+
+        toast.open()
+      }
+
+      /**
+       * Update
+       */
+      _update () {
+        const ajax = this.$['ajax']
+        const form = this.$['card'].children[0].serializeForm()
+
+        let user = {
+          email: form.email,
+          firstName: form.firstName,
+          lastName: form.lastName,
+          username: form.username
+        }
+
+        ajax.body = user
+        ajax.method = 'post'
+        ajax.params = {}
+
+        ajax.url = `${this.config.api.origin}/${this.config.api.path}/users/profile/${this.user.id}`
+        
+        const request = ajax.generateRequest()
+
+        request
+          .completes
+          .then(
+            function (req) {
+              const response = req.response
+
+              if (this.user.id === response.id) {
+                this.user = response
+
+                document.dispatchEvent(
+                  new CustomEvent(
+                    'update-user',
+                    {
+                      detail: {
+                        user: this.user
+                      }
+                    }
+                  )
+                )
+
+                localStorage.setItem('user', JSON.stringify(this.user))
+
+                this._message(
+                  '#008000',
+                  'Profile updated successfully!'
+                )
+              }
+
+            }
+            .bind(this),
+            function () {
+              this._message('var(--paper-red-700)', 'Communication Error: Please refresh your browser.')
+            }
+            .bind(this)
+          )
+      }
+
+      /**
+       * Verify uniqueness
+       */
+      _verifyUniqueness () {
+        const email = this.$['email']
+        const username = this.$['username']
+
+        let value
+        let match = true
+
+        if (email.value) {
+          value = email.value.trim().toLowerCase()
+          const pattern = new RegExp(/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/)
+          match = pattern.test(value)
+        }
+
+        if (match) {
+          const checkEmail = this._checkExists('email', email.value)
+          const checkUsername = this._checkExists('username', username.value)
+
+          let verified = true
+
+          checkEmail
+            .then((value) => {
+              if (value) {
+                if (
+                  value.id !== this.user.id
+                ) {
+                  verified = false
+
+                  email.invalid = true
+                  email.errorMessage = 'Must be unique.'
+                }
+              }
+            })
+
+          checkUsername
+            .then((value) => {
+              if (value) {
+                if (
+                  value.id !== this.user.id
+                ) {
+                  verified = false
+
+                  username.invalid = true
+                  username.errorMessage = 'Must be unique.'
+                }
+              }
+            })
+
+          Promise
+            .all([checkEmail, checkUsername])
+            .then(() => {
+              if (verified) {
+                if (this.$['card'].children[0].validate()) {
+                  this._update()
+                }
+              }
+            })
+        }
+      }
+    }
+    
+    window.customElements.define(MyEditProfile.is, MyEditProfile)
+
+  </script>
+
+</dom-module>

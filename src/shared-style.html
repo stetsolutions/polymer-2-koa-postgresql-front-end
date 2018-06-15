@@ -1,0 +1,219 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+
+<!-- shared styles for all views -->
+<dom-module id="shared-styles">
+  <template>
+    <style>
+
+      hr {
+        background: #c0c0c0;
+        border: 0;
+        height: 1px;
+      }
+
+      paper-button span,
+      paper-tab span {
+        padding-left: 5px;
+      }
+
+      paper-button {
+        border: 2px solid transparent;
+        height: 36px;
+      }
+
+      paper-button paper-checkbox {
+        line-height: 36px;
+        padding: 0 16px;
+      }
+
+      paper-checkbox {
+        --paper-checkbox-checked-color: #000;
+      }
+
+      paper-item {
+        cursor: pointer;
+        white-space: nowrap;
+        --paper-item-focused-before: {
+          opacity: 0;
+        };
+      }
+
+      paper-item:hover {
+        background-color: #eceaec;
+      }
+
+      paper-spinner {
+        display: none;
+      }
+
+      paper-spinner[active] {
+        display: block;
+        left: 50%;
+        margin-left: -25px;
+        margin-top: -25px;
+        position: fixed;
+        top: 50%;
+      }
+
+      paper-toggle-button {
+        cursor: pointer;
+      }
+
+      .button--checkbox {
+        min-height: 36px;
+        padding: 0;
+        --paper-checkbox-checked-color: #000;
+      }
+      
+      .card {
+        background-color: #fff;
+        border-radius: 2px;
+        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+        margin: 16px;
+        overflow: auto;
+        padding: 16px;
+      }
+
+      .chip {
+        background-color: #c0c0c0;
+        border-radius: 25px;
+        color: #fff;
+        height: 36px;
+        padding: 0 16px;
+        text-transform: uppercase;
+        @apply --layout;
+        @apply --layout-center-center;
+      }
+
+      .image {
+        height: 100%;
+        width: 100%;
+        @apply --layout;
+        @apply --layout-center-center;
+      }
+
+      .image-wrapper {
+        border: 1px solid #f0f0f0;
+        padding: 8px;
+      }
+
+      .image-wrapper--secondary {
+        height: 150px;
+        margin: 0 16px 16px 0;
+        width: 150px;
+      }
+
+      .image-wrapper--primary {
+        height: 200px;
+        width: 200px;
+      }
+
+      .item__image {
+        background-color: #fff;
+        border: 1px solid #f0f0f0;
+        height: 25px;
+        padding: 2px;
+        width: 25px;
+      }
+
+      .tabs {
+        margin-bottom: 16px;
+        text-transform: capitalize;
+        --paper-tabs-content: {
+          font-weight: 400;
+        }
+      }
+
+      .tabs__tab {
+        border-bottom: 1px solid #ccc;
+        border-radius: 2px 2px 0 0;
+        box-sizing: border-box;
+        text-transform: uppercase;
+        --paper-tab-ink: #c0c0c0;
+      }
+      
+      .tabs__tab.iron-selected {
+        border: 1px solid #ccc;
+        border-bottom: none;
+        font-weight: 700;
+      }
+
+      .table {
+        overflow: auto;
+      }
+      
+      .table__header,
+      .table__row {
+        display: table-row;
+        width: 100%;
+      }
+
+      .table__header,
+      .table__row--odd:nth-child(odd),
+      .table__row--even:nth-child(even) {
+        background: #eaeaea;
+      }
+      
+      .table__cell {
+        color: #333;
+        display: table-cell;
+        font-size: 15px;
+        overflow: hidden;
+        padding: 10px;
+        text-overflow: ellipsis;
+        vertical-align: middle;
+        width: 1000px;
+      }
+
+      .table__cell--center {
+        text-align: center;
+      }
+
+      .table__cell--icon {
+        width: 80px;
+      }
+
+      .table__cell--id {
+        width: 50px;
+      }
+
+      .table__cell--sort {
+        cursor: pointer;
+        white-space: nowrap;
+      }
+
+      .table__cell--sort:before {
+        content: url(../images/svgs/triangles.svg);
+        margin-left: -7px;
+      }
+
+      .table__cell-list {
+        list-style: none;
+      }
+
+      .table__image {
+        background-color: #fff;
+        border: 1px solid #dadada;
+        height: 50px;
+        padding: 4px;
+        width: 50px;
+      }
+
+      .upload--error {
+        border: 2px solid var(--paper-input-container-invalid-color, var(--error-color));
+        color: var(--paper-input-container-invalid-color, var(--error-color));
+      }
+
+    </style>
+  </template>
+</dom-module>
