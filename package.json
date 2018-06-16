@@ -1,10 +1,10 @@
 {
-  "name": "ss-simple-front-end",
+  "name": "simple-front-end",
   "version": "1.0.0",
   "license": "UNLICENSED",
   "repository": {
     "type": "git",
-    "url": "https://github.com/StetSolutions/ss-simple-front-end.git"
+    "url": "https://github.com/StetSolutions/simple-front-end.git"
   },
   "dependencies": {
     "change-case": "^3.0.1",
@@ -35,9 +35,9 @@
   },
   "description": "## Synopsis",
   "bugs": {
-    "url": "https://github.com/StetSolutions/ss-simple-front-end/issues"
+    "url": "https://github.com/StetSolutions/simple-front-end/issues"
   },
-  "homepage": "https://github.com/StetSolutions/ss-simple-front-end#readme",
+  "homepage": "https://github.com/StetSolutions/simple-front-end#readme",
   "main": "server.js",
   "directories": {
     "test": "test"
