@@ -1,3 +1,27 @@
+# OS
+.DS_Store
+ehthumbs.db
+Icon?
+Thumbs.db
+
+# Node and related ecosystem
+.nodemonignore
 bower_components/
 build/
 node_modules/
+
+# General
+*.env
+*.log
+*.csv
+*.dat
+*.out
+*.pid
+*.gz
+*.tmp
+*.bak
+*.swp
+logs/
+
+# VS Code
+.vscode/*
